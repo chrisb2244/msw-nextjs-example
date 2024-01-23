@@ -1,4 +1,4 @@
-export const dynamic = true;
+export const dynamic = "force-dynamic";
 
 const HomePage = async () => {
   const data = await fetch("https://jsonplaceholder.typicode.com/posts/1").then(
