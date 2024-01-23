@@ -7,12 +7,13 @@ export async function register() {
   ) {
     console.log("Running in development mode, setting up MSW server");
 
+    // Don't import handlers here - import in layout to allow HMR for handlers.
     const { setupServer } = await import("msw/node");
-    const { handlers } = await import("./app/msw-handlers");
-    console.log(handlers, setupServer);
-
-    const server = setupServer(...handlers);
+    const server = setupServer();
     server.listen();
+
+    // @ts-ignore
+    global.mswServer = server;
   } else {
     console.log("Skipping MSW setup");
   }
