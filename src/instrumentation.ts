@@ -10,7 +10,7 @@ export async function register() {
     // Don't import handlers here - import in layout to allow HMR for handlers.
     const { setupServer } = await import("msw/node");
     const server = setupServer();
-    server.listen();
+    server.listen({ remotePort: 3030 });
 
     // @ts-ignore
     global.mswServer = server;
