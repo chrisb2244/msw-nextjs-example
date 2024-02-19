@@ -11,10 +11,7 @@ export async function register() {
     const { setupServer } = await import("msw/node");
     const server = setupServer();
     server.listen({ remotePort: 3030 });
-
-    // @ts-ignore
-    global.mswServer = server;
   } else {
-    console.log("Skipping MSW setup");
+    console.log("Skipping MSW setup for ", process.env.NEXT_RUNTIME);
   }
 }

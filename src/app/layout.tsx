@@ -14,19 +14,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // if (
-  //   process.env.NODE_ENV === "development" &&
-  //   process.env.NEXT_RUNTIME === "nodejs"
-  // ) {
-  //   const mswServer = globalThis.mswServer as
-  //     | import("msw/node").SetupServer
-  //     | undefined;
-  //   if (typeof mswServer !== "undefined") {
-  //     const { handlers } = await import("./msw-handlers");
-  //     mswServer.use(...handlers);
-  //   }
-  // }
-
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>
