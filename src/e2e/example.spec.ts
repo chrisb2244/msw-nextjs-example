@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { test as clientTest } from "./playwright-msw-fixture";
 import { HttpResponse, http } from "msw";
 import { setupRemoteServer } from "msw/node";
 
@@ -35,3 +36,34 @@ test("can be mocked", async ({ context }) => {
   const elemTitle = page.getByText("Hello");
   await expect(elemTitle).toBeVisible();
 });
+
+const mswHandler = http.get(
+  "https://jsonplaceholder.typicode.com/comments",
+  () => {
+    return HttpResponse.json([{ body: "Hello Client!" }]);
+  }
+);
+
+test("client-side fetches can be mocked", async ({ page }) => {
+  page.route("https://jsonplaceholder.typicode.com/comments", (route) => {
+    return route.fulfill({
+      status: 200,
+      body: JSON.stringify([{ body: "Hello Client from Playwright!" }]),
+    });
+  });
+
+  await page.goto("/", { timeout: 5000 });
+
+  const elem = page.getByText("Hello Client from Playwright!");
+  await expect(elem).toBeVisible();
+});
+
+clientTest(
+  "client-side fetches can be mocked with MSW handlers",
+  async ({ page, worker }) => {
+    worker.use(mswHandler);
+    await page.goto("/");
+    const elem = page.getByText("Hello Client!");
+    await expect(elem).toBeVisible();
+  }
+);
